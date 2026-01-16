@@ -4,6 +4,17 @@ Claude Code plugins for AWS development with specialized knowledge and MCP serve
 
 ## Plugins
 
+### 0. AWS Common Plugin (Dependency)
+
+Shared AWS agent skills including AWS Documentation MCP configuration for querying up-to-date AWS knowledge.
+
+**Features**:
+- AWS MCP server configuration guide
+- Documentation MCP setup for querying AWS knowledge
+- Shared by all other AWS plugins as a dependency
+
+**Note**: This plugin is automatically loaded as a dependency by other plugins. Install it first if installing plugins individually.
+
 ### 1. AWS CDK Plugin
 
 AWS CDK development skill with integrated MCP server for infrastructure as code.
@@ -65,6 +76,10 @@ Add the marketplace to Claude Code:
 Install plugins individually:
 
 ```bash
+# Install the common dependency first
+/plugin install aws-common@aws-skills
+
+# Then install the plugins you need
 /plugin install aws-cdk@aws-skills
 /plugin install aws-cost-ops@aws-skills
 /plugin install serverless-eda@aws-skills
@@ -214,6 +229,10 @@ Configure observability for my AgentCore runtime with CloudWatch dashboards
 ├── .claude-plugin/
 │   └── marketplace.json              # Plugin marketplace configuration
 ├── plugins/                          # Each plugin has isolated skills
+│   ├── aws-common/
+│   │   └── skills/
+│   │       └── aws-mcp-setup/        # Shared MCP configuration skill
+│   │           └── SKILL.md
 │   ├── aws-cdk/
 │   │   └── skills/
 │   │       └── aws-cdk-development/  # CDK development skill

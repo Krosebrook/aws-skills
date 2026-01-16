@@ -4,13 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is an AWS skills plugin marketplace for Claude Code. It contains 4 plugins that provide AWS development expertise through skills and MCP server integrations.
+This is an AWS skills plugin marketplace for Claude Code. It contains 5 plugins that provide AWS development expertise through skills and MCP server integrations.
 
 ## Architecture
 
 ```
 .claude-plugin/marketplace.json    # Plugin marketplace definition (versions, MCP servers)
 plugins/
+├── aws-common/                    # Shared skills (aws-mcp-setup) - dependency for all others
 ├── aws-cdk/                       # CDK infrastructure as code
 ├── aws-cost-ops/                  # Cost optimization & monitoring
 ├── serverless-eda/                # Serverless & event-driven patterns
@@ -45,6 +46,7 @@ claude -p "Read the frontmatter of aws-cdk-development skill"
 **If symlinks break, recreate them:**
 ```bash
 cd .claude && rm -rf skills && mkdir skills
+ln -s ../../plugins/aws-common/skills/aws-mcp-setup skills/
 ln -s ../../plugins/aws-cdk/skills/aws-cdk-development skills/
 ln -s ../../plugins/serverless-eda/skills/aws-serverless-eda skills/
 ln -s ../../plugins/aws-agentic-ai/skills/aws-agentic-ai skills/
@@ -90,7 +92,20 @@ Versions are in `.claude-plugin/marketplace.json`:
 - `metadata.version` - Overall marketplace version
 - `plugins[].version` - Individual plugin versions
 
-Bump minor version when adding features, patch for fixes.
+### Version Bump Rules
+
+| Change Type | Version Bump | Examples |
+|-------------|--------------|----------|
+| **Minor** (x.Y.0) | New features, new skills, new dependencies | Add new skill, add `skills:` dependency, add MCP server |
+| **Patch** (x.y.Z) | Bug fixes, doc updates, config tweaks | Fix broken links, update descriptions, fix typos |
+
+**When to bump:**
+- Adding/modifying `skills:` frontmatter dependencies → Minor bump for affected plugins
+- Adding new plugin → Minor bump for marketplace version
+- Updating skill content without structural changes → Patch bump
+- Fixing configuration issues → Patch bump
+
+**Always bump versions** when modifying plugin content before committing.
 
 ## Key Files to Modify
 
